@@ -473,7 +473,7 @@
     </div>
   </a>
 
-  <!-- Interstitial Popup Ad (Auto fires after clicking 2 wallpapers) -->
+  <!-- Interstitial Popup Ad (Auto fires after clicking 3 wallpapers) -->
   <div class="interstitial-ad" id="interstitialAd">
     <div class="ad-card">
       <button class="interstitial-close" id="closeAd">✕</button>
@@ -539,49 +539,119 @@
       return offCanvas.toDataURL("image/jpeg", 0.88);
     }
 
-    // High-Resolution Space Collection (Online NASA/Unsplash Direct Links + Offline Fallbacks)
+    // 16 Space & Galaxy Wallpapers + Offline Fallbacks
     const spaceWallpapers = [
       {
         id: "sp1",
-        title: "డీప్ జేమ్స్ వెబ్ నెబ్యులా",
+        title: "ডিপ স্পেস নেবুলা",
         category: "Nebula",
         src: "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=720&q=80",
         fallback: generateSpaceArt("galaxy")
       },
       {
         id: "sp2",
-        title: "గోల్డెన్ కాస్మిక్ ఆర్బిట్",
+        title: "গোল্ডেন কসমিক অরবিট",
         category: "Planets",
         src: "https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop&w=720&q=80",
         fallback: generateSpaceArt("saturn")
       },
       {
         id: "sp3",
-        title: "బ్లూ డార్క్ సూపర్నోవా",
+        title: "ব্লু ডার্ক সুপারনোভা",
         category: "Stars",
         src: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=720&q=80",
         fallback: generateSpaceArt("supernova")
       },
       {
         id: "sp4",
-        title: "మిల్కీవే అండ్ గెలాక్సీ విండ్",
+        title: "মিল্কিওয়ে ও গ্যালাক্সি ভিউ",
         category: "Galaxy",
         src: "https://images.unsplash.com/photo-1538370965046-79c0d6907d47?auto=format&fit=crop&w=720&q=80",
         fallback: generateSpaceArt("galaxy")
       },
       {
         id: "sp5",
-        title: "ఆస్ట్రోనాట్ స్పేస్వాక్",
+        title: "অ্যাস্ট্রোনট স্পেসওয়াক",
         category: "Astronaut",
         src: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=720&q=80",
         fallback: generateSpaceArt("supernova")
       },
       {
         id: "sp6",
-        title: "రెడ్ మార్స్ సర్ఫేస్",
+        title: "রেড মার্স সারফেস",
         category: "Planets",
         src: "https://images.unsplash.com/photo-1614728423169-3f65fd722b7e?auto=format&fit=crop&w=720&q=80",
         fallback: generateSpaceArt("saturn")
+      },
+      {
+        id: "sp7",
+        title: "অ্যান্ড্রোমিডা গ্যালাক্সি কোর",
+        category: "Galaxy",
+        src: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=720&q=80",
+        fallback: generateSpaceArt("galaxy")
+      },
+      {
+        id: "sp8",
+        title: "ডিপ স্পেস নেবুলা ক্লাউড",
+        category: "Nebula",
+        src: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=720&q=80",
+        fallback: generateSpaceArt("galaxy")
+      },
+      {
+        id: "sp9",
+        title: "মহাজাগতিক তারাপুঞ্জ ও ধূলিকণা",
+        category: "Stars",
+        src: "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?auto=format&fit=crop&w=720&q=80",
+        fallback: generateSpaceArt("supernova")
+      },
+      {
+        id: "sp10",
+        title: "চাঁদের পৃষ্ঠ ও মহাকাশ",
+        category: "Planets",
+        src: "https://images.unsplash.com/photo-1522030299830-16b8d3d049fe?auto=format&fit=crop&w=720&q=80",
+        fallback: generateSpaceArt("saturn")
+      },
+      {
+        id: "sp11",
+        title: "হাবল স্পেস ভিউ",
+        category: "Nebula",
+        src: "https://images.unsplash.com/photo-1543722530-d2c3201371e7?auto=format&fit=crop&w=720&q=80",
+        fallback: generateSpaceArt("galaxy")
+      },
+      {
+        id: "sp12",
+        title: "কসমিক স্পেস আর্ট",
+        category: "Astronaut",
+        src: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=720&q=80",
+        fallback: generateSpaceArt("supernova")
+      },
+      {
+        id: "sp13",
+        title: "পার্পল ও ব্লু কসমিক ডাস্ট",
+        category: "Galaxy",
+        src: "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=720&q=80",
+        fallback: generateSpaceArt("galaxy")
+      },
+      {
+        id: "sp14",
+        title: "সূর্য ও সৌরঝড়",
+        category: "Stars",
+        src: "https://images.unsplash.com/photo-1532693322450-2cb5c511067d?auto=format&fit=crop&w=720&q=80",
+        fallback: generateSpaceArt("supernova")
+      },
+      {
+        id: "sp15",
+        title: "দূরবর্তী স্পেস ওয়ার্ল্ড",
+        category: "Planets",
+        src: "https://images.unsplash.com/photo-1447433589675-4aaa569f3e05?auto=format&fit=crop&w=720&q=80",
+        fallback: generateSpaceArt("saturn")
+      },
+      {
+        id: "sp16",
+        title: "গ্যালাক্সির রঙিন ঘূর্ণন",
+        category: "Galaxy",
+        src: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=720&q=80",
+        fallback: generateSpaceArt("galaxy")
       }
     ];
 
@@ -636,8 +706,8 @@
     }
 
     function renderGrid() {
-      const list = activeCategory === "All" 
-        ? spaceWallpapers 
+      const list = activeCategory === "All"
+        ? spaceWallpapers
         : spaceWallpapers.filter(w => w.category === activeCategory);
 
       countLabel.textContent = `${activeCategory === "All" ? "সব স্পেস ওয়ালপেপার" : activeCategory} (${list.length})`;
@@ -646,12 +716,11 @@
       list.forEach((item) => {
         const card = document.createElement("div");
         card.className = "card";
-        
+
         const img = document.createElement("img");
         img.src = item.src;
         img.alt = item.title;
         img.loading = "lazy";
-        // If device is offline or link fails, switch to offline canvas automatically
         img.onerror = () => { img.src = item.fallback || generateSpaceArt("galaxy"); };
 
         const overlay = document.createElement("div");
@@ -666,7 +735,6 @@
 
         card.onclick = () => {
           clickCounter++;
-          // Trigger automatic Interstitial Ad after every 3 wallpaper views
           if (clickCounter % 3 === 0 && navigator.onLine) {
             interstitialAd.classList.add("show");
           }
