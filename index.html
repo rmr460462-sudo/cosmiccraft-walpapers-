@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>CosmicCraft — Space & Galaxy Wallpapers</title>
+  <style>
+    :root {
+      --bg: #05070f;
+      --surface: #0e1424;
+      --surface-2: #162035;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-purple: #c084fc;
+      --border: rgba(255, 255, 255, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      min-height: 100vh;
+      padding-bottom: 74px; /* Space for Bottom Sticky Ad */
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(5, 7, 15, 0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 14px;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-purple));
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+    }
+
+    .brand h1 {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .brand p {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .upload-btn {
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      padding: 7px 11px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    #fileInput {
+      display: none;
+    }
+
+    .categories {
+      display: flex;
+      gap: 7px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .categories::-webkit-scrollbar {
+      display: none;
+    }
+
+    .chip {
+      flex: 0 0 auto;
+      padding: 6px 13px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .chip.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent-purple));
+      color: #07101c;
+      border-color: transparent;
+    }
+
+    main {
+      padding: 12px 14px 0;
+    }
+
+    .section-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .card {
+      position: relative;
+      aspect-ratio: 9 / 15;
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      cursor: pointer;
+    }
+
+    .card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(5, 7, 15, 0.9) 0%, transparent 55%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 9px;
+    }
+
+    .card-tag {
+      align-self: flex-start;
+      background: rgba(14, 20, 36, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: var(--accent);
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      margin-bottom: 3px;
+    }
+
+    .card-title {
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* Fullscreen Modal */
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background: rgba(3, 5, 11, 0.96);
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 14px;
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-info {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      border-radius: 10px;
+    }
+
+    .modal-info h2 {
+      font-size: 13px;
+    }
+
+    .modal-info span {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .close-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: var(--surface);
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .preview-frame {
+      flex: 1;
+      margin: 12px auto;
+      width: 100%;
+      max-width: 360px;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 2px solid rgba(255, 255, 255, 0.14);
+      background: #000;
+    }
+
+    .preview-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .modal-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      max-width: 380px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .action-btn {
+      padding: 12px;
+      border-radius: 12px;
+      border: none;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-download {
+      background: linear-gradient(135deg, var(--accent), var(--accent-purple));
+      color: #07101c;
+    }
+
+    .btn-secondary {
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    /* Fixed Bottom Banner Ad (Auto Shows on Net) */
+    .bottom-ad-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      background: #090e1a;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 40;
+      text-decoration: none;
+    }
+
+    .bottom-ad-bar.active {
+      display: flex;
+    }
+
+    .ad-content {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 12px;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .ad-badge {
+      font-size: 9px;
+      background: #f59e0b;
+      color: #000;
+      font-weight: 800;
+      padding: 2px 4px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .ad-body {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .ad-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .ad-sub {
+      font-size: 10px;
+      color: var(--muted);
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .ad-cta {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 8px;
+    }
+
+    /* Fullscreen Interstitial Ad Modal */
+    .interstitial-ad {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(0, 0, 0, 0.95);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .interstitial-ad.show {
+      display: flex;
+    }
+
+    .ad-card {
+      background: #0f172a;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 24px 20px;
+      max-width: 320px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+      position: relative;
+    }
+
+    .interstitial-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: #fff;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 74px;
+      left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      background: #0f172a;
+      color: #f8fafc;
+      border: 1px solid rgba(56, 189, 248, 0.45);
+      padding: 9px 14px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.2s ease;
+      z-index: 60;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-top">
+      <div class="brand">
+        <div class="brand-badge">🚀</div>
+        <div>
+          <h1>CosmicCraft</h1>
+          <p>স্পেস, গ্যালাক্সি ও তারা ওয়ালপেপার</p>
+        </div>
+      </div>
+
+      <label class="upload-btn" for="fileInput">➕ ছবি যোগ করুন</label>
+      <input type="file" id="fileInput" accept="image/*" multiple />
+    </div>
+
+    <div class="categories" id="categoryBar"></div>
+  </header>
+
+  <main>
+    <div class="section-meta">
+      <span id="countLabel">সব স্পেস ওয়ালপেপার</span>
+      <span>ট্যাপ করে ফুল-স্ক্রিন দেখুন</span>
+    </div>
+    <div class="grid" id="wallpaperGrid"></div>
+  </main>
+
+  <!-- Wallpaper Preview Modal -->
+  <div class="modal" id="previewModal">
+    <div class="modal-top">
+      <div class="modal-info">
+        <h2 id="modalTitle">ওয়ালপেপার</h2>
+        <span id="modalCategory">স্পেস থিম</span>
+      </div>
+      <button class="close-btn" id="closeModal">✕</button>
+    </div>
+
+    <div class="preview-frame">
+      <img id="modalImg" src="" alt="Space Preview" />
+    </div>
+
+    <div class="modal-actions">
+      <button class="action-btn btn-secondary" id="btnInfo">📱 সেট করার নিয়ম</button>
+      <button class="action-btn btn-download" id="btnDownload">⬇️ ডাউনলোড</button>
+    </div>
+  </div>
+
+  <!-- Auto Bottom Banner Ad (Shows Automatically if Net is Online) -->
+  <a href="https://google.com" target="_blank" class="bottom-ad-bar" id="bottomAd">
+    <div class="ad-content">
+      <span class="ad-badge">Ad</span>
+      <div class="ad-body">
+        <div class="ad-title">Play Top Mobile Games 2026</div>
+        <div class="ad-sub">Install & win rewards directly on your phone</div>
+      </div>
+      <div class="ad-cta">Install</div>
+    </div>
+  </a>
+
+  <!-- Interstitial Popup Ad (Auto fires after clicking 2 wallpapers) -->
+  <div class="interstitial-ad" id="interstitialAd">
+    <div class="ad-card">
+      <button class="interstitial-close" id="closeAd">✕</button>
+      <div style="font-size: 38px; margin-bottom: 8px;">🎁</div>
+      <span class="ad-badge" style="margin-bottom: 8px; display: inline-block;">Sponsor Ad</span>
+      <h3 style="font-size: 15px; margin-bottom: 6px;">স্পনসরড অফার</h3>
+      <p style="font-size: 12px; color: var(--muted); margin-bottom: 14px;">সেরা স্পেস গেম এবং ডিল আনলক করুন সরাসরি আপনার ফোনে।</p>
+      <a href="https://google.com" target="_blank" style="display: block; background: linear-gradient(135deg, var(--accent), var(--accent-purple)); color: #07101c; text-decoration: none; padding: 10px; border-radius: 10px; font-weight: 700; font-size: 13px;">ভিজিট করুন</a>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // Offline Canvas Generator for Zero-Network Failure
+    const offCanvas = document.createElement("canvas");
+    offCanvas.width = 540;
+    offCanvas.height = 900;
+    const octx = offCanvas.getContext("2d");
+
+    function generateSpaceArt(type) {
+      const grad = octx.createRadialGradient(270, 450, 40, 270, 450, 450);
+      if (type === "galaxy") {
+        grad.addColorStop(0, "#c084fc");
+        grad.addColorStop(0.3, "#3b0764");
+        grad.addColorStop(0.7, "#0f172a");
+        grad.addColorStop(1, "#030712");
+      } else if (type === "saturn") {
+        grad.addColorStop(0, "#fde047");
+        grad.addColorStop(0.25, "#b45309");
+        grad.addColorStop(0.65, "#1e1b4b");
+        grad.addColorStop(1, "#020617");
+      } else {
+        grad.addColorStop(0, "#38bdf8");
+        grad.addColorStop(0.4, "#0369a1");
+        grad.addColorStop(0.8, "#020617");
+        grad.addColorStop(1, "#000000");
+      }
+
+      octx.fillStyle = grad;
+      octx.fillRect(0, 0, 540, 900);
+
+      // Stars generator
+      octx.fillStyle = "#ffffff";
+      for (let i = 0; i < 90; i++) {
+        const sx = Math.random() * 540;
+        const sy = Math.random() * 900;
+        const sr = Math.random() * 1.8;
+        octx.beginPath();
+        octx.arc(sx, sy, sr, 0, Math.PI * 2);
+        octx.fill();
+      }
+
+      // Planetary rings for saturn
+      if (type === "saturn") {
+        octx.strokeStyle = "rgba(253, 224, 71, 0.4)";
+        octx.lineWidth = 14;
+        octx.beginPath();
+        octx.ellipse(270, 450, 210, 50, -Math.PI / 8, 0, Math.PI * 2);
+        octx.stroke();
+      }
+
+      return offCanvas.toDataURL("image/jpeg", 0.88);
+    }
+
+    // High-Resolution Space Collection (Online NASA/Unsplash Direct Links + Offline Fallbacks)
+    const spaceWallpapers = [
+      {
+        id: "sp1",
+        title: "డీప్ జేమ్స్ వెబ్ నెబ్యులా",
+        category: "Nebula",
+        src: "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=720&q=80",
+        fallback: generateSpaceArt("galaxy")
+      },
+      {
+        id: "sp2",
+        title: "గోల్డెన్ కాస్మిక్ ఆర్బిట్",
+        category: "Planets",
+        src: "https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop&w=720&q=80",
+        fallback: generateSpaceArt("saturn")
+      },
+      {
+        id: "sp3",
+        title: "బ్లూ డార్క్ సూపర్నోవా",
+        category: "Stars",
+        src: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=720&q=80",
+        fallback: generateSpaceArt("supernova")
+      },
+      {
+        id: "sp4",
+        title: "మిల్కీవే అండ్ గెలాక్సీ విండ్",
+        category: "Galaxy",
+        src: "https://images.unsplash.com/photo-1538370965046-79c0d6907d47?auto=format&fit=crop&w=720&q=80",
+        fallback: generateSpaceArt("galaxy")
+      },
+      {
+        id: "sp5",
+        title: "ఆస్ట్రోనాట్ స్పేస్వాక్",
+        category: "Astronaut",
+        src: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=720&q=80",
+        fallback: generateSpaceArt("supernova")
+      },
+      {
+        id: "sp6",
+        title: "రెడ్ మార్స్ సర్ఫేస్",
+        category: "Planets",
+        src: "https://images.unsplash.com/photo-1614728423169-3f65fd722b7e?auto=format&fit=crop&w=720&q=80",
+        fallback: generateSpaceArt("saturn")
+      }
+    ];
+
+    const categories = ["All", "Nebula", "Galaxy", "Planets", "Stars", "Astronaut"];
+    let activeCategory = "All";
+    let currentItem = null;
+    let clickCounter = 0;
+
+    const categoryBar = document.getElementById("categoryBar");
+    const grid = document.getElementById("wallpaperGrid");
+    const countLabel = document.getElementById("countLabel");
+    const modal = document.getElementById("previewModal");
+    const modalImg = document.getElementById("modalImg");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalCategory = document.getElementById("modalCategory");
+    const toast = document.getElementById("toast");
+    const bottomAd = document.getElementById("bottomAd");
+    const interstitialAd = document.getElementById("interstitialAd");
+
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.classList.add("show");
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => toast.classList.remove("show"), 2200);
+    }
+
+    // Automatic Ad Trigger Check (Online Detection)
+    function checkAutoAds() {
+      if (navigator.onLine) {
+        bottomAd.classList.add("active");
+      } else {
+        bottomAd.classList.remove("active");
+      }
+    }
+    window.addEventListener("online", checkAutoAds);
+    window.addEventListener("offline", checkAutoAds);
+    checkAutoAds();
+
+    function renderCategories() {
+      categoryBar.innerHTML = "";
+      categories.forEach((cat) => {
+        const btn = document.createElement("button");
+        btn.className = "chip" + (activeCategory === cat ? " active" : "");
+        btn.textContent = cat === "All" ? "সবগুলো" : cat;
+        btn.onclick = () => {
+          activeCategory = cat;
+          renderCategories();
+          renderGrid();
+        };
+        categoryBar.appendChild(btn);
+      });
+    }
+
+    function renderGrid() {
+      const list = activeCategory === "All" 
+        ? spaceWallpapers 
+        : spaceWallpapers.filter(w => w.category === activeCategory);
+
+      countLabel.textContent = `${activeCategory === "All" ? "সব স্পেস ওয়ালপেপার" : activeCategory} (${list.length})`;
+      grid.innerHTML = "";
+
+      list.forEach((item) => {
+        const card = document.createElement("div");
+        card.className = "card";
+        
+        const img = document.createElement("img");
+        img.src = item.src;
+        img.alt = item.title;
+        img.loading = "lazy";
+        // If device is offline or link fails, switch to offline canvas automatically
+        img.onerror = () => { img.src = item.fallback || generateSpaceArt("galaxy"); };
+
+        const overlay = document.createElement("div");
+        overlay.className = "card-overlay";
+        overlay.innerHTML = `
+          <span class="card-tag">${item.category}</span>
+          <div class="card-title">${item.title}</div>
+        `;
+
+        card.appendChild(img);
+        card.appendChild(overlay);
+
+        card.onclick = () => {
+          clickCounter++;
+          // Trigger automatic Interstitial Ad after every 3 wallpaper views
+          if (clickCounter % 3 === 0 && navigator.onLine) {
+            interstitialAd.classList.add("show");
+          }
+
+          currentItem = item;
+          modalImg.src = img.src;
+          modalTitle.textContent = item.title;
+          modalCategory.textContent = `${item.category} • 4K HD Space Art`;
+          modal.classList.add("open");
+        };
+
+        grid.appendChild(card);
+      });
+    }
+
+    document.getElementById("closeModal").onclick = () => modal.classList.remove("open");
+    document.getElementById("closeAd").onclick = () => interstitialAd.classList.remove("show");
+
+    document.getElementById("btnInfo").onclick = () => {
+      showToast("ডাউনলোড করে ফোনের Gallery থেকে Set as Wallpaper দিন");
+    };
+
+    document.getElementById("btnDownload").onclick = () => {
+      if (!currentItem) return;
+      const a = document.createElement("a");
+      a.href = modalImg.src;
+      a.download = `${currentItem.title.replace(/\s+/g, "_")}.jpg`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast("স্পেস ওয়ালপেপার ডাউনলোড শুরু হয়েছে!");
+    };
+
+    // User Upload Feature
+    document.getElementById("fileInput").onchange = (e) => {
+      const files = Array.from(e.target.files || []);
+      files.forEach((file, i) => {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          spaceWallpapers.unshift({
+            id: "custom_" + Date.now() + "_" + i,
+            title: file.name.replace(/\.[^/.]+$/, "") || "কাস্টম স্পেস",
+            category: "Stars",
+            src: ev.target.result,
+            fallback: ev.target.result
+          });
+          renderGrid();
+        };
+        reader.readAsDataURL(file);
+      });
+      if (files.length) showToast(`${files.length}টি ছবি যুক্ত হয়েছে`);
+      e.target.value = "";
+    };
+
+    renderCategories();
+    renderGrid();
+  </script>
+</body>
+</html>
