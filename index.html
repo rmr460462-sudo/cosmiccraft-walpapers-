@@ -757,16 +757,44 @@
       showToast("ডাউনলোড করে ফোনের Gallery থেকে Set as Wallpaper দিন");
     };
 
-    document.getElementById("btnDownload").onclick = () => {
+        document.getElementById("btnDownload").onclick = async () => {
       if (!currentItem) return;
-      const a = document.createElement("a");
-      a.href = modalImg.src;
-      a.download = `${currentItem.title.replace(/\s+/g, "_")}.jpg`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      showToast("স্পেস ওয়ালপেপার ডাউনলোড শুরু হয়েছে!");
+      const imgUrl = modalImg.src;
+      const fileName = `${currentItem.title.replace(/\s+/g, "_")}.jpg`;
+
+      if (imgUrl.startsWith("data:")) {
+        const a = document.createElement("a");
+        a.href = imgUrl;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        showToast("ছবি ডাউনলোড হচ্ছে...");
+        return;
+      }
+
+      try {
+        showToast("ছবি তৈরি হচ্ছে, একটু অপেক্ষা করুন...");
+        const res = await fetch(imgUrl, { mode: "cors" });
+        if (!res.ok) throw new Error("Network response not ok");
+        const blob = await res.blob();
+        const blobUrl = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = blobUrl;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 3000);
+        showToast("স্পেস ওয়ালপেপার ডাউনলোড শুরু হয়েছে!");
+      } catch (err) {
+        window.open(imgUrl, "_blank");
+        showToast("ছবিটি খুলেছে—চাপ দিয়ে ধরে Save করুন");
+      }
     };
+    
 
     // User Upload Feature
     document.getElementById("fileInput").onchange = (e) => {
